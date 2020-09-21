@@ -69,6 +69,19 @@ class Module {
                         $container
                     );
                 },
+                # Weos App Controller
+                Controller\ApiController::class => function($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    $oWeosTbl = new TableGateway('weos_order', $oDbAdapter);
+                    $aPluginTbls = [];
+                    $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    return new Controller\ApiController(
+                        $oDbAdapter,
+                        $oWeosTbl,
+                        $aPluginTbls,
+                        $container
+                    );
+                },
                 # Installer
                 Controller\InstallController::class => function($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);

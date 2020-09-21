@@ -33,8 +33,36 @@ return [
                         'id'     => '[0-9]+',
                     ],
                     'defaults' => [
-                        'controller' => Controller\WeosController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'start',
+                    ],
+                ],
+            ],
+            'weos-order' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/order[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'start',
+                    ],
+                ],
+            ],
+            'weos-user' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/user[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'start',
                     ],
                 ],
             ],

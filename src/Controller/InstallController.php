@@ -52,8 +52,8 @@ class InstallController extends CoreUpdateController {
             $bTableExists = false;
 
             try {
-                $this->oTableGateway->select();
-                $bTableExists = true;
+                //$this->oTableGateway->select();
+                //$bTableExists = true;
             } catch (\RuntimeException $e) {
 
             }
