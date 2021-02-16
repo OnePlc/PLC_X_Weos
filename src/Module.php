@@ -69,13 +69,47 @@ class Module {
                         $container
                     );
                 },
+                # Web Main Controller
+                Controller\WebController::class => function($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    $oWeosTbl = new TableGateway('weos_order', $oDbAdapter);
+                    $aPluginTbls = [];
+                    $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    $aPluginTbls['zip'] = new TableGateway('contact_address_zipcity', $oDbAdapter);
+                    $aPluginTbls['contact-zip'] = new TableGateway('contact_zipcity', $oDbAdapter);
+                    return new Controller\WebController(
+                        $oDbAdapter,
+                        $oWeosTbl,
+                        $aPluginTbls,
+                        $container
+                    );
+                },
                 # Weos App Controller
                 Controller\ApiController::class => function($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);
                     $oWeosTbl = new TableGateway('weos_order', $oDbAdapter);
                     $aPluginTbls = [];
                     $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    $aPluginTbls['zip'] = new TableGateway('contact_address_zipcity', $oDbAdapter);
+                    $aPluginTbls['contact-zip'] = new TableGateway('contact_zipcity', $oDbAdapter);
+                    $aPluginTbls['booking-slot'] = new TableGateway('weos_booking_slot', $oDbAdapter);
+                    $aPluginTbls['event'] = $container->get(\OnePlace\Event\Model\EventTable::class);
+
                     return new Controller\ApiController(
+                        $oDbAdapter,
+                        $oWeosTbl,
+                        $aPluginTbls,
+                        $container
+                    );
+                },
+                # Bookings Controller
+                Controller\BookingController::class => function($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    $oWeosTbl = new TableGateway('weos_order', $oDbAdapter);
+                    $aPluginTbls = [];
+                    $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    $aPluginTbls['booking-slot'] = new TableGateway('weos_booking_slot', $oDbAdapter);
+                    return new Controller\BookingController(
                         $oDbAdapter,
                         $oWeosTbl,
                         $aPluginTbls,

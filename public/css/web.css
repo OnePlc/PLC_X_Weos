@@ -1,0 +1,19 @@
+a.navbar-brand img {
+    height: 60px;
+}
+
+
+.home-parallax {
+    background:url(/vendor/oneplace-weos/img/home.jpg) no-repeat fixed;
+    background-size:cover;
+    min-height:200px;
+}
+
+.checked {
+    color: orange;
+}
+
+.listFilterCategory:hover {
+    cursor: pointer;
+    background: aqua;
+}

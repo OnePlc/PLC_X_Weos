@@ -1,0 +1,44 @@
+<?php
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/vendor/oneplace-weos/js/addslot.js');
+?>
+<form action="" method="POST">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Slot erfassen</h3>
+        </div>
+        <div class="card-body">
+            <label for="slot_weekday">Wochentag</label>
+            <select class="form-control" name="slot_weekday">
+                <option value="1">Montag</option>
+                <option value="2">Dienstag</option>
+                <option value="3">Mittwoch</option>
+                <option value="4">Donnerstag</option>
+                <option value="5">Freitag</option>
+                <option value="6">Samstag</option>
+                <option value="0">Sonntag</option>
+            </select>
+        </div>
+        <div class="card-body">
+            <label for="slot_weekday">Zeitfenster</label>
+            <ul class="list-group timeSlotList">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="time" name="slot_timestart[]" class="form-control" value="08:00" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="time" name="slot_timeend[]" class="form-control" value="17:00" />
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <a href="#" class="plcAddTimeSlot">
+                <i class="fas fa-plus"></i> Weiteres Zeitfenster hinzufügen
+            </a>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-primary" value="Slot speichern" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,71 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 21.09.2020
+ * Time: 21:23
+ */
+
+$this->InlineScript()
+    ->appendFile('/vendor/oneplace-weos/lib/moment-with-locales.js')
+    ->appendFile('/vendor/oneplace-weos/lib/tempus-dominus/tempusdominus-bootstrap-4.min.js')
+    ->appendFile('/vendor/oneplace-weos/js/view.js');
+
+$this->headLink()
+    ->appendStylesheet('/vendor/oneplace-weos/lib/tempus-dominus/bootstrap-datetimepicker.min.css');
+
+?>
+<input type="hidden" id="weosContactID" value="<?=$oContact->getID()?> " />
+
+<div class="container-fluid">
+    <div class="row bg-primary text-white py-4">
+        <div class="col-md-2">
+            <a href="/somerandom-seo-<?=$sZip?>">
+                <i class="fas fa-chevron-left fa-2x text-white"></i>
+            </a>
+        </div>
+        <div class="col-md-8 text-center">
+            <h1 class="text-center w-100" style="font-size:18px;"><?=$oContact->getLabel()?></h1>
+        </div>
+        <div class="col-md-2">
+            
+        </div>
+    </div>
+    <div class="row bg-dark py-2">
+        <div class="container text-white">
+            <i class="fas fa-info-circle mr-2"></i> Bitte beachten Sie unsere aktuellen Hnweise wegen COVID-19
+        </div>
+    </div>
+    <div class="row home-parallax">
+        <div style="opacity: .5; padding-top:50px; background:#000; width:100%; height:250px;">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row py-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Termin buchen bei <?=$oContact->getLabel()?></h2>
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow:hidden;">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div id="datetimepicker13"></div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div id="timeslotpicker"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-primary" value="Termin jetzt buchen" /  >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

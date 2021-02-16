@@ -1,0 +1,64 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 21.09.2020
+ * Time: 20:31
+ */
+?>
+<div class="container-fluid w-100 vh-100" style="background:url(/vendor/oneplace-weos/img/home.jpg) no-repeat; background-size:cover;">
+    <div class="row">
+        <div class="col-md-2">
+            <img src="/img/logo.png" style="max-width:100%; max-height:70px;" />
+        </div>
+        <div class="col-md-9"></div>
+        <div class="col-md-1 text-right py-4 px-4">
+            <i class="fas fa-bars fa-2x text-grey"></i>
+        </div>
+    </div>
+    <div class="container py-4">
+        <div class="row py-4">
+            <div class="col-md-12 text-center">
+                <h1>Jetzt Termin in der Umgebung buchen <br/><small>Coiffeure, Physio, u.v.m</small></h1>
+            </div>
+        </div>
+        <div class="row py-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <select id="searchLocation" style="width:100%; padding:20px;"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .select2-selection {
+        min-height: 64px;
+    }
+
+    .select2-selection__rendered {
+        margin: 16px;
+    }
+
+    .select2-selection__arrow {
+        margin: 16px;
+    }
+</style>
+
+<script>
+    $(function() {
+        $('#searchLocation').select2({
+            placeholder: "<?=$this->translate('Ihr Wohnort')?>",
+            ajax: {
+                type: 'POST',
+                url: '/app/order/zip?authkey=ONVC-OPMZ-5WXK-JJLP-CL6G-6U5Q-ML0W-VKM9&authtoken=123456',
+                dataType: 'json'
+            }
+        });
+
+        $('#searchLocation').on('select2:select', function(e) {
+            var iZip = e.params.data.id;
+            window.location = '/somerandom-seo-'+iZip;
+        })
+    });
+</script>

@@ -1,0 +1,19 @@
+<?php if(count($aResults) > 0) { ?>
+    <ul class="list-group w-100">
+    <?php foreach($aResults as $oRes) { ?>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="/random-singleseo-<?=$oRes->id?>-<?=$iZip?>">
+                        <h5><?=$oRes->label?></h5>
+                    </a>
+                </div>
+            </div>
+        </li>
+    <?php } ?>
+    </ul>
+<?php } else { ?>
+    <div class="alert alert-info p-4">
+        Keine passenden Dienstleister gefunden
+    </div>
+<?php } ?>

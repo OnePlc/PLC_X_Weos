@@ -92,6 +92,8 @@ class InstallController extends CoreUpdateController {
                 }
             }
 
+            symlink($_SERVER['DOCUMENT_ROOT'].'../vendor/oneplace/oneplace-event/public', $_SERVER['DOCUMENT_ROOT'].'vendor/oneplace-event');
+
             $oModTbl = new TableGateway('core_module', CoreUpdateController::$oDbAdapter);
             $oModTbl->insert([
                 'module_key'=>'oneplace-weos',

@@ -1,0 +1,70 @@
+<?php
+use Application\Controller\CoreController;
+?>
+<!doctype html>
+<html lang="de-DE">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <?= $this->headTitle('WEOS Prototyp')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <?php if(isset($this->layout()->bNoIndex)) { ?>
+        <meta name="robots" content="noindex" />
+    <?php } ?>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="content-language" content="de">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <?php if(isset($this->layout()->sMetaDesc)) { ?>
+        <meta name="description" content="<?=$this->layout()->sMetaDesc?>">
+    <?php } ?>
+    <?php if(isset($this->layout()->sOGImage)) { ?>
+        <meta property="og:image" content="<?=$this->layout()->sOGImage?>">
+    <?php } ?>
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/oneplace-weos/lib/tempus-dominus/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+    <?= $this->headLink() ?>
+    <!-- Page Style2 -->
+    <link href="/vendor/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="/vendor/oneplace-weos/css/web.css" rel="stylesheet">
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/vendor/select2/dist/js/select2.full.min.js"></script>
+</head>
+
+<body>
+<?php if(isset(CoreController::$oSession->oUser)) { ?>
+<div class="container-fluid px-0 bg-dark p-2">
+    <div class="row">
+        <div class="col-md-6 text-left">
+            <span class="text-white">Willkommen <?=CoreController::$oSession->oUser->getLabel()?></span>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="/home" class="text-white"><i class="fas fa-home"></i> Backend</a>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<!-- Page Content -->
+<div class="container-fluid px-0">
+    <?= $this->content ?>
+    <footer>
+
+    </footer>
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://kit.fontawesome.com/0e8b0a2463.js" crossorigin="anonymous"></script>
+<?= $this->inlineScript() ?>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+<?php  if(count($aResults) > 0) { ?>
+    <ul class="list-group">
+    <?php foreach($aResults as $oRes) { ?>
+        <li class="list-group-item">
+            <?=$oRes->start?> - <?=$oRes->end?>
+        </li>
+    <?php } ?>
+    </ul>
+<?php } ?>

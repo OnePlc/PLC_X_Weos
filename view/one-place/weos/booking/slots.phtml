@@ -1,0 +1,34 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Verfügbarkeit (Slots)</h2>
+    </div>
+    <div class="card-body p-0 b-0">
+        <ul class="list-group">
+        <?php
+        if(count($aSlots) > 0) {
+            $dowMap = ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'];
+            foreach($aSlots as $oSlot) { ?>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-1">
+                        <?=$dowMap[$oSlot->weekday]?>
+                    </div>
+                    <div class="col-md-2">
+                        <?=$oSlot->time_start?>
+                    </div>
+                    <div class="col-md-2">
+                        <?=$oSlot->time_end?>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/booking/editslot/"><i class="fas fa-edit"></i></a> |
+                        <a href="/booking/rmslot/"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </li>
+        <?php
+            }
+        }
+        ?>
+        </ul>
+    </div>
+</div>

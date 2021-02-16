@@ -1,0 +1,7 @@
+<?php
+try {
+    echo $this->partial('webviews/help/'.$sPage, []);
+} catch(\RuntimeException $e) {
+    echo 'help page not found';
+}
+?>

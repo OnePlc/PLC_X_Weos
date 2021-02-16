@@ -23,6 +23,46 @@ return [
     # Weos Module - Routes
     'router' => [
         'routes' => [
+            # Web Home
+            'home' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/',
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'home',
+                    ],
+                ],
+            ],
+            # Module Basic Route
+            'weos-zip' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/somerandom-seo-[:zip]',
+                    'constraints' => [
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'list',
+                    ],
+                ],
+            ],
+            # Module Basic Route
+            'weos-single' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/random-singleseo-[:contact]-[:zip]',
+                    'constraints' => [
+                        'contact'     => '[0-9]+',
+                        'zip'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'view',
+                    ],
+                ],
+            ],
             # Module Basic Route
             'weos' => [
                 'type'    => Segment::class,
@@ -30,7 +70,7 @@ return [
                     'route' => '/app[/:action[/:id]]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
+                        'id'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\ApiController::class,
@@ -49,6 +89,75 @@ return [
                     'defaults' => [
                         'controller' => Controller\ApiController::class,
                         'action'     => 'start',
+                    ],
+                ],
+            ],
+            'weos-web' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/web[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+            'weos-booking-api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/calendar[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'dates',
+                    ],
+                ],
+            ],
+            'weos-supplier-api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/supplier[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'list',
+                    ],
+                ],
+            ],
+            'weos-calendar-plugin' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/timeslots[/:id]',
+                    'constraints' => [
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'timeslots',
+                    ],
+                ],
+            ],
+            'weos-bookings' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/booking[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\BookingController::class,
+                        'action'     => 'index',
                     ],
                 ],
             ],
