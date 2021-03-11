@@ -92,6 +92,20 @@ return [
                     ],
                 ],
             ],
+            'weos-api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/api[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'start',
+                    ],
+                ],
+            ],
             'weos-web' => [
                 'type'    => Segment::class,
                 'options' => [

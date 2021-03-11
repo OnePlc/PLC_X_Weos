@@ -76,20 +76,16 @@ class ApiController extends CoreEntityController
                     'state' => 'error',
                     'message' => 'invalid json',
                 ];
-            } elseif(!property_exists($oJSON,'email')) {
-                $aReturn = [
-                    'state' => 'error',
-                    'message' => 'invalid json',
-                ];
             } else {
+                /**
                 $sUser = $oJSON->email;
 
                 $oUser = CoreEntityController::$aCoreTables['user']->select([
                     'email' => $sUser
-                ]);
+                ]); **/
 
-                if(count($oUser) > 0) {
-                    $oUser = $oUser->current();
+                //if(count($oUser) > 0) {
+                //    $oUser = $oUser->current();
 
                     # Get contact categories
                     $aCategories = [];
@@ -99,7 +95,11 @@ class ApiController extends CoreEntityController
                     ]);
                     if(count($oCatsDB) > 0) {
                         foreach($oCatsDB as $oCat) {
-                            $aCategories[] = (object)['id' => $oCat->Entitytag_ID, 'label' => $oCat->tag_value];
+                            $aCategories[] = (object)[
+                                'id' => $oCat->Entitytag_ID,
+                                'label' => $oCat->tag_value,
+                                'icon' => $oCat->tag_icon,
+                            ];
                         }
                     }
 
@@ -108,12 +108,12 @@ class ApiController extends CoreEntityController
                         'categories' => $aCategories,
                     ];
 
-                } else {
-                    $aReturn = [
-                        'state' => 'error',
-                        'message' => 'User not found',
-                    ];
-                }
+                //} else {
+                //    $aReturn = [
+                //        'state' => 'error',
+                //        'message' => 'User not found',
+                //    ];
+                //}
             }
 
             header('Content-Type: application/json');
@@ -886,6 +886,112 @@ class ApiController extends CoreEntityController
                 'message' => 'found '.count($aContacts).' matching contacts in '.$iZip,
                 'pagination' => (object)['more' => false],
             ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($aReturn);
+
+        return false;
+    }
+
+    public function ziplocatorAction()
+    {
+        $this->layout('layout/json');
+
+        $oJSON = json_decode($this->getRequest()->getContent());
+        if(!is_object($oJSON)) {
+            $aReturn = [
+                'state' => 'error',
+                'message' => 'invalid json',
+            ];
+        } else {
+            $sZip = $oJSON->term;
+
+            $aReturn = [
+                'results' => [],
+                'message' => 'no results for zip '.$sZip,
+                'pagination' => (object)['more'=>false],
+            ];
+
+            $oWh = new Where();
+            $oWh->like('zip',(int)$sZip.'%')->or->like('city',$sZip.'%');
+
+            $oResultsDB = $this->aPluginTbls['zip']->select($oWh);
+
+            if(count($oResultsDB) > 0) {
+                $aReturn['message'] = count($oResultsDB).' results for zip '.$sZip;
+
+                foreach($oResultsDB as $oCat) {
+                    $aReturn['results'][] = (object)[
+                        'id'=>$oCat->zip,
+                        'text'=>$oCat->zip.' '.$oCat->city,
+                    ];
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($aReturn);
+
+        return false;
+    }
+
+    public function placeAction()
+    {
+        $this->layout('layout/json');
+
+        $oJSON = json_decode($this->getRequest()->getContent());
+        if(!is_object($oJSON)) {
+            $aReturn = [
+                'state' => 'error',
+                'message' => 'invalid json',
+            ];
+        } else {
+            $iCompanyID = $oJSON->company_id;
+            $iContactID = $oJSON->contact_id;
+            $iUserID = $oJSON->user_id;
+            $sDate = $oJSON->date;
+            $sTime = $oJSON->time;
+            $sFirstname = $oJSON->firstname;
+            $sLastname = $oJSON->lastname;
+            $iZip = $oJSON->zip;
+            $sStreet = $oJSON->street;
+            $sAppartment = $oJSON->appartment;
+            $sPhone = $oJSON->phone;
+            $sEmail = $oJSON->email;
+
+            $aCheckEvs = [];
+            $oEvCheck = $this->aPluginTbls['event']->fetchAll(true, ['date_start-like' => date('Y-m-d H:i', strtotime($sDate.' '.$sTime))]);
+            if(count($oEvCheck) > 0) {
+                foreach($oEvCheck as $oEv) {
+                    $aCheckEvs[] = $oEv;
+                }
+            }
+            if(count($aCheckEvs) == 0) {
+                $oNewEvent = new \OnePlace\Event\Model\Event(CoreEntityController::$oDbAdapter);
+                $oNewEvent->exchangeArray([
+                    'label' => 'Termin von WEOS.ch',
+                    'date_start' => date('Y-m-d H:i', strtotime($sDate.' '.$sTime)),
+                    'date_end' => date('Y-m-d H:i', strtotime($sDate.' '.$sTime)+3600),
+                    'calendar_idfs' => 1,
+                    'created_by' => 1,
+                    'modified_by' => 1,
+                    'created_date' => date('Y-m-d H:i:s', time()),
+                    'modified_date' => date('Y-m-d H:i:s', time()),
+                ]);
+
+                $iEventID = $this->aPluginTbls['event']->saveSingle($oNewEvent);
+
+                $aReturn = [
+                    'state' => 'success',
+                    'message' => 'order successfully placed',
+                ];
+            } else {
+                $aReturn = [
+                    'state' => 'error',
+                    'message' => 'there is already an event at this time',
+                ];
+            }
         }
 
         header('Content-Type: application/json');
