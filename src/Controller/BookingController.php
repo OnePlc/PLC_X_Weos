@@ -51,6 +51,9 @@ class BookingController extends CoreEntityController
         parent::__construct($oDbAdapter, $oTableGateway, $oServiceManager);
     }
 
+    /**
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $this->setThemeBasedLayout('weos');
@@ -61,6 +64,9 @@ class BookingController extends CoreEntityController
         return new ViewModel([]);
     }
 
+    /**
+     * @return ViewModel
+     */
     public function slotsAction()
     {
         $this->setThemeBasedLayout('weos');
@@ -76,6 +82,9 @@ class BookingController extends CoreEntityController
         ]);
     }
 
+    /**
+     * @return ViewModel
+     */
     public function addslotAction()
     {
         $this->setThemeBasedLayout('weos');
@@ -109,10 +118,13 @@ class BookingController extends CoreEntityController
         return $this->redirect()->toRoute('weos-bookings', ['action' => 'slots']);
     }
 
+    /**
+     * @return ViewModel
+     */
     public function calendarAction()
     {
         $this->setThemeBasedLayout('weos');
 
-        return [];
+        return new ViewModel([]);
     }
 }
