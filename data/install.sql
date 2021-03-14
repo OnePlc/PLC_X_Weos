@@ -38,7 +38,8 @@ INSERT INTO `permission` (`permission_key`, `module`, `label`, `nav_label`, `nav
 ('calendar', 'OnePlace\\Weos\\Controller\\BookingController', 'Buchungen Kalender', 'Kalender', '/booking/calendar', '1', '0'),
 ('slots', 'OnePlace\\Weos\\Controller\\BookingController', 'Buchungen Slots', '', '', '0', '0'),
 ('timeslots', 'OnePlace\\Weos\\Controller\\ApiController', 'Kalender TimeSlots anzeigen', '', '', '0', '0'),
-('addslot', 'OnePlace\\Weos\\Controller\\BookingController', 'Slot erfassen', '', '', '0', '0');
+('addslot', 'OnePlace\\Weos\\Controller\\BookingController', 'Slot erfassen', '', '', '0', '0'),
+('confirm', 'OnePlace\\Weos\\Controller\\BookingController', 'Buchung bestätigen', '', '', '0', '0');
 
 
 INSERT INTO `core_form_button` (`Button_ID`, `label`, `icon`, `title`, `href`, `class`, `append`, `form`, `mode`, `filter_check`, `filter_value`) VALUES
@@ -46,5 +47,8 @@ INSERT INTO `core_form_button` (`Button_ID`, `label`, `icon`, `title`, `href`, `
 (NULL, 'Add Slot', 'fas fa-plus', 'Add Slot', '/booking/addslot', 'primary', '', 'weos-booking-slots', 'link', '', '');
 
 INSERT INTO `settings` (`settings_key`, `settings_value`) VALUES ('calendar-timeslots', '1');
+
+INSERT INTO `core_widget` (`Widget_ID`, `widget_name`, `label`, `permission`) VALUES
+(NULL, 'weos_booking-requests', 'WEOS - Buchungsanfragen', 'calendar-OnePlace\\Weos\\Controller\\BookingController');
 
 COMMIT;

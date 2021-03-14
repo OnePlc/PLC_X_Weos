@@ -61,7 +61,32 @@ class BookingController extends CoreEntityController
         # Add Buttons for breadcrumb
         $this->setViewButtons('weos-booking-index');
 
-        return new ViewModel([]);
+        $aOpenEvs = [];
+        $oOpenEvsDB = $this->aPluginTbls['event']->fetchAll(false, ['is_confirmed-like' => 0]);
+        if(count($oOpenEvsDB) > 0 ) {
+            foreach($oOpenEvsDB as $oOpenEv) {
+                $aOpenEvs[] = $oOpenEv;
+            }
+        }
+
+        $aEventSources = [];
+        $aCalendars = [];
+        $aCalendarsDB = $this->aPluginTbls['event-calendar']->fetchAll(false,[]);
+        foreach($aCalendarsDB as $oCal) {
+            $aEventSources[] = (object)[
+                'url' => '/calendar/load/' . $oCal->getID(),
+                'color' => $oCal->getColor('background'),
+                'border' => $oCal->getColor('background'),
+                'textColor' => $oCal->getColor('text'),
+            ];
+            $aCalendars[] = $oCal;
+        }
+
+        return new ViewModel([
+            'aOpenEvs' => $aOpenEvs,
+            'aEventSources' => $aEventSources,
+            'aCalendars' => $aCalendars,
+        ]);
     }
 
     /**
@@ -126,5 +151,19 @@ class BookingController extends CoreEntityController
         $this->setThemeBasedLayout('weos');
 
         return new ViewModel([]);
+    }
+
+    public function confirmAction()
+    {
+        $this->layout('layout/json');
+
+        $iEventID = $this->params()->fromRoute('id', 0);
+
+        $this->aPluginTbls['event']->updateAttribute('calendar_idfs', 1, 'Event_ID', $iEventID);
+        $this->aPluginTbls['event']->updateAttribute('is_confirmed', 1, 'Event_ID', $iEventID);
+
+        $this->flashMessenger()->addSuccessMessage('Termin erfolgreich bestätigt. Kunde wird informiert.');
+
+        return $this->redirect()->toRoute('weos-bookings', ['action' => 'index']);
     }
 }

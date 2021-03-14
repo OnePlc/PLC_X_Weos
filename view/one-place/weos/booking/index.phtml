@@ -1,7 +1,161 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 05.07.2019
+ * Time: 20:49
+ */
+
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/vendor/oneplace-event/lib/@fullcalendar/main.min.js')
+    ->appendFile($this->basePath() . '/vendor/oneplace-event/lib/@fullcalendar/locales-all.min.js');
+
+$this->headLink()
+    ->appendStylesheet($this->basePath() . '/vendor/oneplace-event/lib/@fullcalendar/main.min.css')
+?>
+<div class="row">
+    <div class="col-md-3">
+        <div class="col-xl-12 col-md-12 mb-4">
+            <div class="card border-left-warning shadow h-100 py-0">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <?=$this->translate('Kalender')?>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <?php foreach($aCalendars as $oCal) { ?>
+                            <li class="list-group-item">
+                                <span class="btn btn-primary" style="border:1px solid <?=$oCal->getColor('background')?>; background:<?=$oCal->getColor('background')?>; color:<?=$oCal->getColor('text')?>;"><?=$oCal->getLabel()?></span>
+                            </li>
+                        <?php }?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-md-12 mb-4">
+            <div class="card border-left-warning shadow h-100 py-0">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        Offene Buchungsanfragen
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <b>Datum</b>
+                                </div>
+                                <div class="col-md-3">
+                                    <b>Name</b>
+                                </div>
+                                <div class="col-md-3">
+                                    <b>Ort</b>
+                                </div>
+                                <div class="col-md-3 text-right">
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="list-group">
+                        <?php foreach($aOpenEvs as $oEv) { ?>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="#" class="jumpToBookingDate" plc-jumpto="<?=date('Y-m-d', strtotime($oEv->date_start))?>">
+                                        <?=date('d.m - H:i', strtotime($oEv->date_start))?>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        Max Mustermann
+                                    </div>
+                                    <div class="col-md-3">
+                                        8212 Neuhausen
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <a href="/booking/confirm/<?=$oEv->getID()?>" class="btn btn-success">
+                                            <i class="fas fa-check"></i>
+                                        </a> | <a href="#" class="btn btn-danger">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-9">
+        <div id='calendar'></div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+</div>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            navLinks: true, // can click day/week names to navigate views
+            //editable: true,
+            defaultDate: '<?=date('Y-m-d',time())?>',
+            locale: 'de',
+            weekNumbers: true,
+            eventClick: function(info) {
+                $.post('/event/modal/'+info.event.id,{mode:'modal',goto:'general'},function(retModal) {
+                    $('#exampleModalCenter').html(retModal);
+                    $('#exampleModalCenter').modal('toggle');
+                });
+            },
+            dateClick: function(info) {
+                var sDateSelected = info.dateStr;
+                $.get('/event/modal/0',{mode:'modal',goto:'general',date:sDateSelected},function(retModal) {
+                    $('#exampleModalCenter').html(retModal);
+                    $('#exampleModalCenter').modal('toggle');
+                });
+            },
+            eventSources: <?=json_encode($aEventSources)?>
+        });
+        calendar.render();
+
+        <?php if($dJump != '') { ?>
+        calendar.gotoDate('<?=$dJump?>');
+        <?php } ?>
+
+        <?php
+        if($iEventSelID != 0) { ?>
+        $.post('/event/modal/<?=$iEventSelID?>',{mode:'modal',goto:'general'},function(retModal) {
+            $('#exampleModalCenter').html(retModal);
+            $('#exampleModalCenter').modal('toggle');
+        });
+        <?php } ?>
+
+        $('.jumpToBookingDate').on('click', function () {
+            var sJumpDate = $(this).attr('plc-jumpto');
+
+            calendar.gotoDate(sJumpDate);
+
+            return false;
+        });
+    });
+</script>
+
+
+<?php
+/*
 echo $this->partial('partial/indexheader',[
-    'sTitle'=>'Buchungen',
+    'sTitle'=>'Offene Buchungsanfragen',
     'sIcon' => 'fas fa-list',
-    'sCount'=>'0 total'
-])
+    'sCount'=> count($aOpenEvs).' total'
+]); */
 ?>

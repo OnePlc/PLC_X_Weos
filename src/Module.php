@@ -108,6 +108,8 @@ class Module {
                     $oWeosTbl = new TableGateway('weos_order', $oDbAdapter);
                     $aPluginTbls = [];
                     $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    $aPluginTbls['event'] = $container->get(\OnePlace\Event\Model\EventTable::class);
+                    $aPluginTbls['event-calendar'] = $container->get(\OnePlace\Event\Model\CalendarTable::class);
                     $aPluginTbls['booking-slot'] = new TableGateway('weos_booking_slot', $oDbAdapter);
                     return new Controller\BookingController(
                         $oDbAdapter,

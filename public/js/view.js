@@ -1,5 +1,15 @@
 $(function () {
     function loadCalendar(iMonth) {
+        var iDay = '01';
+        if(typeof iMonth !== 'undefined') {
+
+        } else {
+            var d = new Date();
+            var n = d.getMonth();
+            var o = d.getDate();
+            iMonth = n+1;
+            iDay = o;
+        }
         var iContactID = $('#weosContactID').val();
 
         console.log('load contact slots for '+iContactID);
@@ -13,8 +23,9 @@ $(function () {
             $('#datetimepicker13').datetimepicker('destroy');
             $('#datetimepicker13').datetimepicker({
                 inline: true,
+                locale: 'de',
                 format: 'L',
-                defaultDate: "2021-"+iMonth+"-01",
+                defaultDate: "2021-"+iMonth+"-"+iDay,
                 enabledDates: enabledDates,
                 sideBySide: true
             });
@@ -37,6 +48,5 @@ $(function () {
         });
     });
 
-
-    loadCalendar(2);
+    loadCalendar();
 });

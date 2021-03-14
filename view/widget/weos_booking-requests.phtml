@@ -1,0 +1,32 @@
+<?php
+use Application\Controller\CoreController;
+
+$oEvTbl = CoreController::$oServiceManager->get(\OnePlace\Event\Model\EventTable::class);
+
+$aOpenEvs = [];
+$oOpenEvsDB = $oEvTbl->fetchAll(false, ['is_confirmed-like' => 0]);
+if(count($oOpenEvsDB) > 0 ) {
+    foreach($oOpenEvsDB as $oOpenEv) {
+        $aOpenEvs[] = $oOpenEv;
+    }
+}
+?>
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-0">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                        Buchungs Anfragen</div>
+                    <h3 class="mb-0 font-weight-bold text-gray-800"><?=count($aOpenEvs)?></h3>
+                    <i class="fas fa-calendar-alt fa-4x text-warning" style="position: absolute; opacity:.3; font-size:72px; right:0; top:0;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="/booking">
+                Offene Anfragen durchsehen & bestätigen
+            </a>
+        </div>
+    </div>
+</div>
