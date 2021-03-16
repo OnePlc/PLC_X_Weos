@@ -676,16 +676,24 @@ class ApiController extends CoreEntityController
                 }
             }
 
-            $iDays = cal_days_in_month( 0, $iMonth, $iYear);
-            for($iDay = 1;$iDay <= $iDays;$iDay++) {
-                $sDateCheck = $iYear.'-'.
-                    str_pad("".$iMonth."", 2, '0', STR_PAD_LEFT).'-'.
-                    str_pad("".$iDay."", 2, '0', STR_PAD_LEFT);
-                $iWeekday = date('w', strtotime($sDateCheck));
-                if(array_key_exists($iWeekday,$aSlotsByWeekDay)) {
-                    $aDatesThisMonth[] = $sDateCheck;
+            for($iNextMonth = 1;$iNextMonth <= 12;$iNextMonth++) {
+                $iDays = cal_days_in_month( 0, $iMonth, $iYear);
+                for($iDay = 1;$iDay <= $iDays;$iDay++) {
+                    $sDateCheck = $iYear.'-'.
+                        str_pad("".$iMonth."", 2, '0', STR_PAD_LEFT).'-'.
+                        str_pad("".$iDay."", 2, '0', STR_PAD_LEFT);
+                    $iWeekday = date('w', strtotime($sDateCheck));
+                    if(array_key_exists($iWeekday,$aSlotsByWeekDay)) {
+                        $aDatesThisMonth[] = $sDateCheck;
+                    }
+                }
+                $iMonth++;
+                if($iMonth > 12) {
+                    $iMonth = 1;
+                    $iYear++;
                 }
             }
+
 
             $aReturn = [
                 'state' => 'success',
